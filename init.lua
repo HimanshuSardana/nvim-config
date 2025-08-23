@@ -30,3 +30,7 @@ require("config.autocommands")
 
 -- LSP
 vim.lsp.enable({ 'luals' })
+
+-- COPILOT CHAT
+vim.api.nvim_set_hl(0, 'CopilotChatHeader', { fg = '#7C3AED', bold = true })
+vim.api.nvim_set_hl(0, 'CopilotChatSeparator', { fg = '#374151' })

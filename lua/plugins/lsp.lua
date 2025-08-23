@@ -14,6 +14,10 @@ return {
 	config = function()
 		local capabilities = require("blink.cmp").get_lsp_capabilities()
 		require("lspconfig").lua_ls.setup { capabilities = capabilities }
+		-- python
 		require("lspconfig").basedpyright.setup { capabilities = capabilities }
+
+		-- typst
+		require("lspconfig").tinymist.setup { capabilities = capabilities, formatterMode = "typstyle" }
 	end
 }
