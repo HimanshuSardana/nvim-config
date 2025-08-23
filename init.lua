@@ -2,6 +2,7 @@
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.clipboard = "unnamedplus"
+
 vim.cmd("set nowrap")
 
 vim.opt.foldmethod = "expr"
@@ -10,6 +11,11 @@ vim.opt.foldcolumn = "1"
 vim.opt.foldtext = ""
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
+
+vim.opt.cursorline = true
+vim.opt.showmode = false
+vim.opt.swapfile = false
+-- vim.o.winborder = "single"
 
 vim.g.python3_host_prog = "/usr/bin/python3"
 
@@ -22,3 +28,5 @@ require("config.keybinds")
 -- AUTOCOMMANDS
 require("config.autocommands")
 
+-- LSP
+vim.lsp.enable({ 'luals' })
