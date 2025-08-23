@@ -17,3 +17,4 @@ vim.keymap.set("n", "<leader>fg", require("fzf-lua").live_grep, { desc = "[F]ind
 
 -- LSP
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open diagnostics window' })
