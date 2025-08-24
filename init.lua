@@ -7,14 +7,15 @@ vim.cmd("set nowrap")
 
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.opt.foldcolumn = "1"
+vim.opt.foldcolumn = "0"
 vim.opt.foldtext = ""
-vim.opt.foldlevel = 99
+vim.opt.foldlevel = 0
 vim.opt.foldlevelstart = 99
 
 vim.opt.cursorline = true
 vim.opt.showmode = false
 vim.opt.swapfile = false
+vim.opt.undodir = vim.fn.stdpath("cache") .. "/undodir"
 -- vim.o.winborder = "single"
 
 vim.g.python3_host_prog = "/usr/bin/python3"
