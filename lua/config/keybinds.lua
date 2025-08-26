@@ -33,14 +33,12 @@ function ToggleTerminal()
 		terminal_winid = nil
 	else
 		vim.cmd("botright split")
-		vim.cmd("resize 10") -- height of terminal
+		vim.cmd("resize 13") -- height of terminal
 		terminal_winid = vim.api.nvim_get_current_win()
 
 		if terminal_bufnr and vim.api.nvim_buf_is_valid(terminal_bufnr) then
-			-- Reuse previous terminal buffer
 			vim.api.nvim_win_set_buf(terminal_winid, terminal_bufnr)
 		else
-			-- Create new terminal buffer
 			vim.cmd("terminal")
 			terminal_bufnr = vim.api.nvim_get_current_buf()
 		end
@@ -51,3 +49,14 @@ end
 
 vim.keymap.set("n", "<leader>tt", ToggleTerminal, { noremap = true, silent = true })
 vim.keymap.set("t", "<leader>tt", [[<C-\><C-n><cmd>lua ToggleTerminal()<CR>]], { noremap = true, silent = true })
+
+-- miniharp
+vim.keymap.set('n', '<leader>m', require('miniharp').toggle_file, { desc = 'miniharp: toggle file mark' })
+vim.keymap.set('n', '<C-n>', require('miniharp').next, { desc = 'miniharp: next file mark' })
+vim.keymap.set('n', '<C-p>', require('miniharp').prev, { desc = 'miniharp: prev file mark' })
+vim.keymap.set('n', '<leader>l', require('miniharp').show_list, { desc = 'miniharp: list marks' })
+
+-- Buffers (with C-n and C-p for next/prev buffer)
+vim.keymap.set("n", "<C-n>", ":bnext<CR>", { desc = "[B]uffer [N]ext" })
+vim.keymap.set("n", "<C-p>", ":bprevious<CR>", { desc = "[B]uffer [P]revious" })
+vim.keymap.set("n", "<C-x>", ":bdelete<CR>", { desc = "[B]uffer [D]elete" })
