@@ -19,11 +19,9 @@ vim.keymap.set("n", "<leader>fg", require("fzf-lua").live_grep, { desc = "[F]ind
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open diagnostics window' })
 
--- TOGGLE TERMINAL
 local terminal_bufnr = nil
 local terminal_winid = nil
 
--- Toggle terminal at the bottom
 local terminal_bufnr = nil
 local terminal_winid = nil
 
@@ -60,3 +58,9 @@ vim.keymap.set('n', '<leader>l', require('miniharp').show_list, { desc = 'miniha
 vim.keymap.set("n", "<C-n>", ":bnext<CR>", { desc = "[B]uffer [N]ext" })
 vim.keymap.set("n", "<C-p>", ":bprevious<CR>", { desc = "[B]uffer [P]revious" })
 vim.keymap.set("n", "<C-x>", ":bdelete<CR>", { desc = "[B]uffer [D]elete" })
+
+-- Resizing splits
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -5<CR>", { desc = "Decrease window width" })
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +5<CR>", { desc = "Increase window width" })
+vim.keymap.set("n", "<C-Up>", "<cmd>resize -5<CR>", { desc = "Decrease window height" })
+vim.keymap.set("n", "<C-Down>", "<cmd>resize +5<CR>", { desc = "Increase window height" })

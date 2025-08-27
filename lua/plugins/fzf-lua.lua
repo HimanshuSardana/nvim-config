@@ -1,8 +1,10 @@
 return {
-  "ibhagwan/fzf-lua",
-  dependencies = { "nvim-tree/nvim-web-devicons" },
-  opts = {},
-  config = function()
-	require('fzf-lua').setup()		
-  end
+	"ibhagwan/fzf-lua",
+	dependencies = { "nvim-tree/nvim-web-devicons" },
+	opts = {},
+	config = function()
+		require('fzf-lua').setup({
+			"ivy"
+		})
+	end
 }

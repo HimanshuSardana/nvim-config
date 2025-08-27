@@ -46,7 +46,6 @@ return {
 			{ "<leader>ccd", "<cmd>CopilotChatDocs<cr>",     mode = "v",          desc = "Copilot Chat: Docs" },
 			{ "<leader>cct", "<cmd>CopilotChatTests<cr>",    mode = "v",          desc = "Copilot Chat: Tests" },
 			{ "<leader>ccm", "<cmd>CopilotChatCommit<cr>",   mode = "n",          desc = "Copilot Chat: Commit" },
-			{ "<leader>ccq", "<cmd>CopilotChatClose<cr>",    mode = "n",          desc = "Copilot Chat: Close" },
 		},
 	},
 }
