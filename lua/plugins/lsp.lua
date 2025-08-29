@@ -19,6 +19,7 @@ return {
 		require("lspconfig").tsserver.setup { capabilities = capabilities, init_options = { preferences = { importModuleSpecifierPreference = "non-relative", quotePreference = "single", }, }, }
 		require("lspconfig").clangd.setup { capabilities = capabilities, filetypes = { "c", "cpp", "objc", "objcpp" }, cmd = { "clangd", "--background-index", "--clang-tidy", "--header-insertion=never" }, }
 		require("lspconfig").marksman.setup { capabilities = capabilities, filetypes = { "markdown" }, }
+		require("lspconfig").emmet_ls.setup { capabilities = capabilities, filetypes = { "html", "css", "javascript", "typescript", "javascriptreact", "typescriptreact", "svelte", "vue", "astro" }, }
 
 		vim.diagnostic.config {
 			virtual_text = true,
