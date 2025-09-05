@@ -22,9 +22,6 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open diagn
 local terminal_bufnr = nil
 local terminal_winid = nil
 
-local terminal_bufnr = nil
-local terminal_winid = nil
-
 function ToggleTerminal()
 	if terminal_winid and vim.api.nvim_win_is_valid(terminal_winid) then
 		vim.api.nvim_win_close(terminal_winid, true)
@@ -62,3 +59,9 @@ vim.keymap.set("n", "<C-Down>", "<cmd>resize +5<CR>", { desc = "Increase window 
 -- Quickfix navigation
 vim.keymap.set("n", "<C-j>", "<cmd>cnext<CR>zz", { desc = "Quickfix [N]ext" })
 vim.keymap.set("n", "<C-k>", "<cmd>cprev<CR>zz", { desc = "Quickfix [P]revious" })
+
+-- tab navigation
+vim.keymap.set("n", "<M-h>", "<cmd>tabprevious<CR>", { desc = "Tab [P]revious" })
+vim.keymap.set("n", "<M-l>", "<cmd>tabnext<CR>", { desc = "Tab [N]ext" })
+vim.keymap.set("n", "<M-t>", "<cmd>tabnew<CR>", { desc = "New [T]ab" })
+vim.keymap.set("n", "<M-x>", "<cmd>tabclose<CR>", { desc = "[X] Close Tab" })
