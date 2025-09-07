@@ -1,13 +1,4 @@
 return {
-	-- CSV Viewer
-	{
-		'vidocqh/data-viewer.nvim',
-		opts = {},
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"kkharji/sqlite.lua", -- Optional, sqlite support
-		}
-	},
 	{
 		"HakonHarnes/img-clip.nvim",
 		event = "VeryLazy",
@@ -16,5 +7,18 @@ return {
 			{ "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
 		},
 	},
-	{ 'nvim-mini/mini.ai', version = false },
+	{
+		'nvim-mini/mini.ai',
+		version = false,
+		config = function()
+			require('mini.ai').setup()
+		end
+	},
+	{
+		"folke/todo-comments.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			require("todo-comments").setup()
+		end
+	},
 }
