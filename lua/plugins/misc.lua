@@ -21,4 +21,16 @@ return {
 			require("todo-comments").setup()
 		end
 	},
+	{
+		"numToStr/Comment.nvim",
+		config = function()
+			require("Comment").setup()
+		end
+	},
+	{
+		"folke/snacks.nvim",
+		config = function()
+			require("snacks").setup()
+		end
+	}
 }

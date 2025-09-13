@@ -37,12 +37,19 @@ return {
 				},
 				Paraphrase = {
 					prompt =
-					"Paraphrase this text in a more formal easy book-like language. Do not modify any markup language syntax, only the text.",
+					"Paraphrase this in a simpler, shorter, easier to understand way, but keep the original meaning.",
 					selection = function(source)
 						local select = require('CopilotChat.select')
 						return select.visual(source)
 					end,
 				},
+				Answer = {
+					prompt = "Answer the question based on the provided context.",
+					selection = function(source)
+						local select = require('CopilotChat.select')
+						return select.visual(source)
+					end,
+				}
 			},
 		},
 		keys = {
@@ -55,6 +62,7 @@ return {
 			{ "<leader>cct", "<cmd>CopilotChatTests<cr>",      mode = "v",          desc = "Copilot Chat: Tests" },
 			{ "<leader>ccm", "<cmd>CopilotChatCommit<cr>",     mode = "n",          desc = "Copilot Chat: Commit" },
 			{ "<leader>ccp", "<cmd>CopilotChatParaphrase<cr>", mode = "v",          desc = "Copilot Chat: Paraphrase" },
+			{ "<leader>cca", "<cmd>CopilotChatAnswer<cr>",     mode = "v",          desc = "Copilot Chat: Answer" }
 		},
 	},
 }
