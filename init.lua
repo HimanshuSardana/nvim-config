@@ -5,19 +5,15 @@ vim.opt.clipboard = "unnamedplus"
 
 vim.cmd("set nowrap")
 
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.opt.foldcolumn = "0"
-vim.opt.foldtext = ""
-vim.opt.foldlevel = 0
-vim.opt.foldlevelstart = 99
+-- FOLDING
+require("config.folding")
 
 vim.opt.cursorline = true
 vim.opt.showmode = false
 vim.opt.swapfile = false
 vim.opt.undodir = vim.fn.stdpath("cache") .. "/undodir"
 vim.opt.undofile = true
--- vim.o.winborder = "rounded"
+vim.o.winborder = "bold"
 
 vim.g.python3_host_prog = "/usr/bin/python3"
 
@@ -31,7 +27,7 @@ require("config.keybinds")
 require("config.autocommands")
 
 -- LSP
-vim.lsp.enable({ 'luals' })
+-- vim.lsp.enable({ 'luals' })
 
 -- COPILOT CHAT
 vim.api.nvim_set_hl(0, 'CopilotChatHeader', { fg = '#7C3AED', bold = true })
