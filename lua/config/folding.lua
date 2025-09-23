@@ -104,7 +104,7 @@ end
 
 table.insert(folded_segments, function(_, foldstart, foldend)
 	return {
-		{ ' 󰘕 ' .. (1 + foldend - foldstart) .. ' ', { 'Bold', 'MoreMsg' } },
+		{ ' 󰘕 ' .. (foldend - foldstart) .. ' ', { 'Bold', 'MoreMsg' } },
 	}
 end)
 
@@ -159,8 +159,8 @@ table.insert(folded_segments, function(buf, foldstart, foldend)
 end)
 
 vim.opt.fillchars:append({
-	fold = '─' -- horizontal line
-	-- fold = ' ' -- just show nothing
+	-- fold = '─' -- horizontal line
+	fold = ' ' -- just show nothing
 })
 
 vim.api.nvim_set_decoration_provider(folded_ns, {

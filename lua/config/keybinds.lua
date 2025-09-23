@@ -81,7 +81,7 @@ function run_block()
 	local lang       = lines[1]:match("```(%w+)")
 	local cmd        = nil
 	if lang == "python" then
-		cmd = "python3"
+		cmd = "uv run"
 	elseif lang == "r" then
 		cmd = "Rscript"
 	end
@@ -113,4 +113,61 @@ function run_block()
 	end
 end
 
-vim.api.nvim_set_keymap("v", "<leader>r", ":lua run_block()<CR>", { noremap = true, silent = true })
+function RunSelectedCode()
+	local bufnr = vim.api.nvim_get_current_buf()
+	local ft = vim.bo.filetype
+	local start_line = vim.fn.getpos("'<")[2] - 1
+	local end_line = vim.fn.getpos("'>")[2]
+	local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line, false)
+	local code = table.concat(lines, "\n")
+
+	local cmd
+	if ft == "python" then
+		cmd = { "python3", "-c", code }
+	elseif ft == "javascript" then
+		cmd = { "node", "-e", code }
+	elseif ft == "lua" then
+		cmd = { "lua", "-e", code }
+	elseif ft == "r" then
+		cmd = { "Rscript", "-e", code }
+	else
+		vim.notify("Unsupported filetype: " .. ft, vim.log.levels.ERROR)
+		return
+	end
+
+	local buf = vim.api.nvim_create_buf(false, true)
+	local width = math.floor(vim.o.columns * 0.8)
+	local height = math.floor(vim.o.lines * 0.8)
+	local row = math.floor((vim.o.lines - height) / 2)
+	local col = math.floor((vim.o.columns - width) / 2)
+
+	local win = vim.api.nvim_open_win(buf, true, {
+		style = "minimal",
+		relative = "editor",
+		width = width,
+		height = height,
+		row = row,
+		col = col,
+		border = "rounded",
+	})
+
+	vim.fn.jobstart(cmd, {
+		stdout_buffered = true,
+		stderr_buffered = true,
+		on_stdout = function(_, data)
+			if data then
+				vim.api.nvim_buf_set_lines(buf, 0, -1, false, data)
+			end
+		end,
+		on_stderr = function(_, data)
+			if data and #data > 0 then
+				vim.api.nvim_buf_set_lines(buf, 0, -1, false, data)
+			end
+		end,
+	})
+end
+
+-- vim.api.nvim_set_keymap("v", "<leader>r", ":lua run_block()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("v", "<leader>r", ":lua RunSelectedCode()<CR>", { noremap = true, silent = true })
+
+-- vim.keymap.set("v", "<leader>r", ":TangleRunVisual<CR>")
