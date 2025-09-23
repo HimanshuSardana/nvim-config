@@ -32,5 +32,11 @@ return {
 		config = function()
 			require("snacks").setup()
 		end
+	},
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		config = function()
+			require("render-markdown").setup()
+		end
 	}
 }

@@ -23,6 +23,7 @@ return {
 			require("lspconfig").lua_ls.setup { capabilities = capabilities }
 			require("lspconfig").r_language_server.setup { capabilities = capabilities }
 			require("lspconfig").basedpyright.setup { capabilities = capabilities }
+			require("lspconfig").ruff.setup { capabilities = capabilities }
 			require("lspconfig").tinymist.setup { capabilities = capabilities, formatterMode = "typstyle" }
 			require("lspconfig").tsserver.setup { capabilities = capabilities, init_options = { preferences = { importModuleSpecifierPreference = "non-relative", quotePreference = "single", }, }, }
 			require("lspconfig").clangd.setup { capabilities = capabilities, filetypes = { "c", "cpp", "objc", "objcpp" }, cmd = { "clangd", "--background-index", "--clang-tidy", "--header-insertion=never" }, }

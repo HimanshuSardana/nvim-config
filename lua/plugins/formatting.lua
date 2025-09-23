@@ -17,7 +17,7 @@ return {
 				markdown = { "prettierd" },
 				graphql = { "prettierd" },
 				lua = { "stylua" },
-				python = { "isort", "black" },
+				python = { "ruff" },
 				typst = { "tinymist", "typstyle" }
 			},
 
