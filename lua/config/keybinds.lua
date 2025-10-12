@@ -168,6 +168,28 @@ function RunSelectedCode()
 end
 
 -- vim.api.nvim_set_keymap("v", "<leader>r", ":lua run_block()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("v", "<leader>r", ":lua RunSelectedCode()<CR>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("v", "<leader>r", ":lua RunSelectedCode()<CR>", { noremap = true, silent = true })
+--
+-- vim.api.nvim_set_keymap('n', '<leader>c',
+-- 	"<cmd>lua require 'mdeval'.eval_code_block()<CR>",
+-- 	{ silent = true, noremap = true })
+--
+-- -- vim.keymap.set("v", "<leader>r", ":TangleRunVisual<CR>")
 
--- vim.keymap.set("v", "<leader>r", ":TangleRunVisual<CR>")
+function send_visual_to_ipython()
+	local bufnr = vim.api.nvim_get_current_buf()
+	local start_line = vim.fn.getpos("'<")[2] - 1
+	local end_line = vim.fn.getpos("'>")[2]
+	local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line, false)
+
+	for i, line in ipairs(lines) do
+		local escaped = line:gsub('"', '\\"')
+		os.execute(string.format('tmux send-keys -t 2 "%s"', escaped))
+		os.execute('tmux send-keys -t 2 C-o')
+		os.execute('tmux send-keys -t 2 down')
+	end
+	os.execute('tmux send-keys -t 2 ^?')
+	os.execute('tmux send-keys -t 2 Enter')
+end
+
+vim.api.nvim_set_keymap("v", "<leader>r", ":lua send_visual_to_ipython()<CR>", { noremap = true, silent = true })
