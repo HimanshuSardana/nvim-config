@@ -29,6 +29,8 @@ return {
 			require("lspconfig").clangd.setup { capabilities = capabilities, filetypes = { "c", "cpp", "objc", "objcpp" }, cmd = { "clangd", "--background-index", "--clang-tidy", "--header-insertion=never" }, }
 			require("lspconfig").marksman.setup { capabilities = capabilities, filetypes = { "markdown" }, }
 			require("lspconfig").emmet_ls.setup { capabilities = capabilities, filetypes = { "html", "css", "javascript", "typescript", "javascriptreact", "typescriptreact", "svelte", "vue", "astro" }, }
+			require("lspconfig").rust_analyzer.setup { capabilities = capabilities, }
+			require("lspconfig").gopls.setup { capabilities = capabilities, }
 
 			vim.diagnostic.config {
 				virtual_text = true,

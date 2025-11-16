@@ -30,7 +30,7 @@ function ToggleTerminal()
 		terminal_winid = nil
 	else
 		vim.cmd("botright split")
-		vim.cmd("resize 13") -- height of terminal
+		vim.cmd("resize 8") -- height of terminal
 		terminal_winid = vim.api.nvim_get_current_win()
 
 		if terminal_bufnr and vim.api.nvim_buf_is_valid(terminal_bufnr) then
@@ -68,128 +68,8 @@ vim.keymap.set("n", "<M-l>", "<cmd>tabnext<CR>", { desc = "Tab [N]ext" })
 vim.keymap.set("n", "<M-t>", "<cmd>tabnew<CR>", { desc = "New [T]ab" })
 vim.keymap.set("n", "<M-x>", "<cmd>tabclose<CR>", { desc = "[X] Close Tab" })
 
--- code execution
-function run_block()
-	local bufnr      = vim.api.nvim_get_current_buf()
-	local start_line = vim.fn.getpos("'<")[2]
-	local end_line   = vim.fn.getpos("'>")[2]
+-- re-run last command (save file and run last command)
+vim.keymap.set("n", "<leader>.", ":w<CR>:!!<up><CR>", { desc = "[R]e-run last command" })
 
-	local lines      = vim.api.nvim_buf_get_lines(bufnr, start_line - 1, end_line, false)
-	local code       = table.concat(lines, "\n")
-
-	-- Detect language
-	local lang       = lines[1]:match("```(%w+)")
-	local cmd        = nil
-	if lang == "python" then
-		cmd = "uv run"
-	elseif lang == "r" then
-		cmd = "Rscript"
-	end
-
-	if cmd then
-		local tmp = os.tmpname()
-		local f = io.open(tmp, "w")
-		f:write(code:gsub("```%w*", ""):gsub("```", "")) -- strip fences
-		f:close()
-
-		local output = vim.fn.system(cmd .. " " .. tmp)
-		os.remove(tmp)
-
-		local output_lines = vim.split(output, "\n", { plain = true })
-
-		if vim.bo.filetype == "typst" then
-			-- Wrap output inside #output()[ ... ]
-			table.insert(output_lines, 1, "#output()[```txt")
-			table.insert(output_lines, "```]")
-		else
-			-- Normal markdown fenced block
-			table.insert(output_lines, 1, "```txt")
-			table.insert(output_lines, "```")
-		end
-
-		vim.api.nvim_buf_set_lines(bufnr, end_line, end_line, false, output_lines)
-	else
-		print("Unsupported language: " .. tostring(lang))
-	end
-end
-
-function RunSelectedCode()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local ft = vim.bo.filetype
-	local start_line = vim.fn.getpos("'<")[2] - 1
-	local end_line = vim.fn.getpos("'>")[2]
-	local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line, false)
-	local code = table.concat(lines, "\n")
-
-	local cmd
-	if ft == "python" then
-		cmd = { "python3", "-c", code }
-	elseif ft == "javascript" then
-		cmd = { "node", "-e", code }
-	elseif ft == "lua" then
-		cmd = { "lua", "-e", code }
-	elseif ft == "r" then
-		cmd = { "Rscript", "-e", code }
-	else
-		vim.notify("Unsupported filetype: " .. ft, vim.log.levels.ERROR)
-		return
-	end
-
-	local buf = vim.api.nvim_create_buf(false, true)
-	local width = math.floor(vim.o.columns * 0.8)
-	local height = math.floor(vim.o.lines * 0.8)
-	local row = math.floor((vim.o.lines - height) / 2)
-	local col = math.floor((vim.o.columns - width) / 2)
-
-	local win = vim.api.nvim_open_win(buf, true, {
-		style = "minimal",
-		relative = "editor",
-		width = width,
-		height = height,
-		row = row,
-		col = col,
-		border = "rounded",
-	})
-
-	vim.fn.jobstart(cmd, {
-		stdout_buffered = true,
-		stderr_buffered = true,
-		on_stdout = function(_, data)
-			if data then
-				vim.api.nvim_buf_set_lines(buf, 0, -1, false, data)
-			end
-		end,
-		on_stderr = function(_, data)
-			if data and #data > 0 then
-				vim.api.nvim_buf_set_lines(buf, 0, -1, false, data)
-			end
-		end,
-	})
-end
-
--- vim.api.nvim_set_keymap("v", "<leader>r", ":lua run_block()<CR>", { noremap = true, silent = true })
--- vim.api.nvim_set_keymap("v", "<leader>r", ":lua RunSelectedCode()<CR>", { noremap = true, silent = true })
---
--- vim.api.nvim_set_keymap('n', '<leader>c',
--- 	"<cmd>lua require 'mdeval'.eval_code_block()<CR>",
--- 	{ silent = true, noremap = true })
---
--- -- vim.keymap.set("v", "<leader>r", ":TangleRunVisual<CR>")
-
-function send_visual_to_ipython()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local start_line = vim.fn.getpos("'<")[2] - 1
-	local end_line = vim.fn.getpos("'>")[2]
-	local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line, false)
-
-	for i, line in ipairs(lines) do
-		local escaped = line:gsub('"', '\\"')
-		os.execute(string.format('tmux send-keys -t 2 "%s"', escaped))
-		os.execute('tmux send-keys -t 2 C-o')
-		os.execute('tmux send-keys -t 2 down')
-	end
-	os.execute('tmux send-keys -t 2 ^?')
-	os.execute('tmux send-keys -t 2 Enter')
-end
-
-vim.api.nvim_set_keymap("v", "<leader>r", ":lua send_visual_to_ipython()<CR>", { noremap = true, silent = true })
+-- MDEval.nvim
+vim.keymap.set("n", "<leader>rc", ":MdEval<CR>", { desc = "[M]arkdown [E]val Line" })

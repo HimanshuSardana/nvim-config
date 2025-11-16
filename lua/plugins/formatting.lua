@@ -18,7 +18,9 @@ return {
 				graphql = { "prettierd" },
 				lua = { "stylua" },
 				python = { "ruff" },
-				typst = { "tinymist", "typstyle" }
+				typst = { "tinymist", "typstyle" },
+				r = { "air" },
+				rust = { "rustfmt" },
 			},
 
 			format_on_save = {

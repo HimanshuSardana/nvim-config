@@ -38,5 +38,29 @@ return {
 		config = function()
 			require("render-markdown").setup()
 		end
+	},
+	{
+		"norcalli/nvim-colorizer.lua",
+		config = function()
+			require("colorizer").setup()
+		end
+	},
+	{
+		"jubnzv/mdeval.nvim",
+		config = function()
+			require("mdeval").setup({
+				require_confirmation = false,
+				eval_options = {
+					R = {
+						command = { "Rscript", "--vanilla" },
+						language_code = "r",
+						exec_type = "interpreted",
+					},
+					python = {
+						command = { "uv run" },
+					},
+				}
+			})
+		end
 	}
 }
