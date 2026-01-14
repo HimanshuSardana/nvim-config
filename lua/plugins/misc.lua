@@ -62,5 +62,24 @@ return {
 				}
 			})
 		end
+	},
+	{
+		'chomosuke/typst-preview.nvim',
+		lazy = false, -- or ft = 'typst'
+		version = '1.*',
+		opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+	},
+	{
+		"radioactivepb/hoverflex.nvim",
+		opts = {
+			disable_default_keybinds = false,
+			keybinds = {
+				buffer = "<leader>hb",
+			}
+		}
+	},
+	{
+		"j-hui/fidget.nvim",
+		opts = {}
 	}
 }

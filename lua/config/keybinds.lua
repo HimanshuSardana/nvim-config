@@ -73,3 +73,78 @@ vim.keymap.set("n", "<leader>.", ":w<CR>:!!<up><CR>", { desc = "[R]e-run last co
 
 -- MDEval.nvim
 vim.keymap.set("n", "<leader>rc", ":MdEval<CR>", { desc = "[M]arkdown [E]val Line" })
+
+-- gS: Edit fenced code block in a separate scratch buffer (LSP enabled)
+local function EditCodeBlockScratch()
+	local src_buf = vim.api.nvim_get_current_buf()
+	local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+	local lines = vim.api.nvim_buf_get_lines(src_buf, 0, -1, false)
+
+	local lang, start_idx, end_idx = nil, nil, nil
+
+	-- Find code fence upward
+	for i = cursor_line, 1, -1 do
+		local fence = lines[i]:match("^```([%w%p]+)")
+		if fence then
+			lang = fence
+			start_idx = i + 1
+			break
+		end
+	end
+	if not start_idx then
+		vim.notify("Not inside a fenced code block", vim.log.levels.WARN)
+		return
+	end
+
+	-- Find closing fence downward
+	for i = start_idx + 1, #lines do
+		if lines[i]:match("^```") then
+			end_idx = i - 1
+			break
+		end
+	end
+	if not end_idx then
+		vim.notify("Code block end not found", vim.log.levels.ERROR)
+		return
+	end
+
+	local block_code = vim.list_slice(lines, start_idx, end_idx)
+
+	-- Open scratch buffer
+	vim.cmd("new")
+	local edit_buf = vim.api.nvim_get_current_buf()
+	vim.api.nvim_buf_set_option(edit_buf, "buftype", "nofile")
+	vim.api.nvim_buf_set_option(edit_buf, "swapfile", false)
+	vim.api.nvim_buf_set_option(edit_buf, "bufhidden", "wipe")
+
+	if lang then
+		vim.api.nvim_buf_set_option(edit_buf, "filetype", lang)
+	end
+
+	vim.api.nvim_buf_set_lines(edit_buf, 0, -1, false, block_code)
+
+	-- On save / buffer leave → write changes back to markdown
+	vim.api.nvim_create_autocmd({ "BufWritePost", "BufWinLeave" }, {
+		buffer = edit_buf,
+		once = true,
+		callback = function()
+			if not vim.api.nvim_buf_is_valid(src_buf) then return end
+			if not vim.api.nvim_buf_is_valid(edit_buf) then return end
+
+			local new_code = vim.api.nvim_buf_get_lines(edit_buf, 0, -1, false)
+			vim.api.nvim_buf_set_lines(src_buf, start_idx, end_idx + 1, false, new_code)
+		end,
+	})
+end
+
+vim.keymap.set("n", "gS", EditCodeBlockScratch, {
+	noremap = true,
+	silent = true,
+	desc = "Edit markdown fenced code block in scratch buffer"
+})
+
+-- gitsigns
+vim.keymap.set("n", "<leader>gs", ":Gitsigns stage_hunk<CR>", { desc = "[G]it [H]unk [S]tage" })
+vim.keymap.set("n", "<leader>gr", ":Gitsigns reset_hunk<CR>", { desc = "[G]it [H]unk [R]eset" })
+vim.keymap.set("n", "<leader>ghp", ":Gitsigns preview_hunk<CR>", { desc = "[G]it [H]unk [P]review" })
+vim.keymap.set("n", "<leader>gb", ":Gitsigns blame_line<CR>", { desc = "[G]it [H]unk [B]lame" })

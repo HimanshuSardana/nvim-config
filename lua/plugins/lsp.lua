@@ -31,6 +31,8 @@ return {
 			require("lspconfig").emmet_ls.setup { capabilities = capabilities, filetypes = { "html", "css", "javascript", "typescript", "javascriptreact", "typescriptreact", "svelte", "vue", "astro" }, }
 			require("lspconfig").rust_analyzer.setup { capabilities = capabilities, }
 			require("lspconfig").gopls.setup { capabilities = capabilities, }
+			require("lspconfig").mdx_analyzer.setup { capabilities = capabilities, filetypes = { "mdx" }, }
+			require("lspconfig").tailwindcss.setup { capabilities = capabilities, }
 
 			vim.diagnostic.config {
 				virtual_text = true,
